@@ -6,7 +6,9 @@ import 'connection.dart';
 import 'jsonRpc.dart';
 import 'localConnection.dart';
 import 'models/event.dart';
+import 'models/streamMode.dart';
 import 'models/token.dart';
+import 'models/videoParams.dart';
 import 'remoteConnection.dart';
 import 'streamCreator.dart';
 

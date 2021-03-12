@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:kooboo_openvidu/models/event.dart';
+import 'package:kooboo_openvidu/models/streamMode.dart';
 import 'package:kooboo_openvidu/session.dart';
-import 'package:kooboo_openvidu/streamCreator.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
 class ChatModel extends ChangeNotifier {

@@ -1,5 +1,8 @@
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
+import 'models/streamMode.dart';
+import 'models/videoParams.dart';
+
 class StreamCreator {
   static MediaStream _stream;
 
@@ -7,6 +10,8 @@ class StreamCreator {
     StreamMode mode, {
     VideoParams videoParams,
   }) async {
+    if (_stream != null) await _stream.dispose();
+
     if (mode == StreamMode.srceen) {
       _stream = await navigator.mediaDevices.getDisplayMedia({
         "audio": true,
@@ -30,27 +35,4 @@ class StreamCreator {
 
     return _stream;
   }
-
-  static Future<void> dispose() async {
-    (await _stream).dispose();
-  }
-}
-
-enum StreamMode {
-  frontCamera,
-  backCamera,
-  srceen,
-  audio,
-}
-
-class VideoParams {
-  final int frameRate;
-  final int width;
-  final int height;
-
-  VideoParams(this.frameRate, this.width, this.height);
-
-  static VideoParams low = VideoParams(30, 480, 640);
-  static VideoParams middle = VideoParams(30, 640, 960);
-  static VideoParams high = VideoParams(30, 1080, 1920);
 }

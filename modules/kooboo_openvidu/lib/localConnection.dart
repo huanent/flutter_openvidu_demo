@@ -1,10 +1,10 @@
 import 'dart:convert';
-
 import 'jsonRpc.dart';
+import 'models/streamMode.dart';
 import 'models/token.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'connection.dart';
-import 'streamCreator.dart';
+import 'models/videoParams.dart';
 
 class LocalConnection extends Connection {
   LocalConnection(String id, Token token, JsonRpc rpc) : super(id, token, rpc);
