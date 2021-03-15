@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:kooboo_openvidu/models/error.dart';
 
 import 'connection.dart';
 import 'jsonRpc.dart';
@@ -34,13 +35,18 @@ class Session {
 
   Future<void> connect([String userName]) async {
     _userName = userName ?? DateTime.now().millisecondsSinceEpoch;
-    _rpc = JsonRpc(onMessage: _onRpcMessage);
-    _rpc.connect("wss://${_token.host}/openvidu?sessionId=${_token.sessionId}");
-    _heartbeat();
-    final response = await _joinRoom(_userName);
-    _dispatchEvent(Event.joinRoom, null);
-    _localConnection = LocalConnection(response["id"], _token, _rpc);
-    _addAlreadyInRoomConnections(response);
+    final url = "wss://${_token.host}/openvidu?sessionId=${_token.sessionId}";
+    try {
+      _rpc = JsonRpc(onMessage: _onRpcMessage);
+      _rpc.connect(url);
+      _heartbeat();
+      final response = await _joinRoom(_userName);
+      _dispatchEvent(Event.joinRoom, null);
+      _localConnection = LocalConnection(response["id"], _token, _rpc);
+      _addAlreadyInRoomConnections(response);
+    } catch (e) {
+      throw NetworkError();
+    }
   }
 
   Future<void> disconnect() async {
@@ -55,14 +61,16 @@ class Session {
     VideoParams videoParams,
   }) async {
     videoParams = videoParams ?? VideoParams.middle;
-    final stream = await StreamCreator.create(mode, videoParams: videoParams);
-    _localConnection.setStream(stream, mode, videoParams);
-    return stream;
+    try {
+      final stream = await StreamCreator.create(mode, videoParams: videoParams);
+      _localConnection.setStream(stream, mode, videoParams);
+      return stream;
+    } catch (e) {
+      throw NotPermissionError();
+    }
   }
 
-  Future<void> publishLocalStream() async {
-    await _localConnection.publishStream();
-  }
+  Future<void> publishLocalStream() => _localConnection.publishStream();
 
   Future<void> publishVideo(bool enable) {
     return _localConnection.publishVideo(enable);
@@ -107,16 +115,18 @@ class Session {
     try {
       await _rpc.send("ping", params: {"interval": 5000}, hasResult: true);
     } catch (e) {
-      _dispatchEvent(Event.error, null);
+      _dispatchEvent(Event.error, {"error": NetworkError()});
     }
 
     Future<void> loop() async {
       while (_active) {
         await Future.delayed(Duration(seconds: 4));
+        if (!_active) break;
+
         try {
           await _rpc.send("ping", hasResult: true);
         } catch (e) {
-          _dispatchEvent(Event.error, null);
+          _dispatchEvent(Event.error, {"error": NetworkError()});
         }
       }
     }
@@ -125,6 +135,7 @@ class Session {
   }
 
   void _dispatchEvent(Event event, Map<String, dynamic> params) {
+    if (event == Event.error) _active = false;
     if (!_handlers.containsKey(event)) return;
     final handler = _handlers[event];
     if (handler != null) handler(params);
@@ -151,7 +162,7 @@ class Session {
 
   void _onRpcMessage(Map<String, dynamic> message) {
     if (!_active) return;
-    print(message);
+    //print(message);
     if (!message.containsKey("method")) return;
     final method = message["method"];
     final params = message["params"];
@@ -170,15 +181,24 @@ class Session {
         break;
       case "participantLeft":
         final id = params["connectionId"];
-        var connection = _remoteConnections[id];
-        connection?.close();
-        _dispatchEvent(Event.removeStream, {"id": id});
+
+        if (_remoteConnections.containsKey(id)) {
+          try {
+            var connection = _remoteConnections[id];
+            connection?.close();
+            _remoteConnections.remove(id);
+          } catch (e) {}
+
+          _dispatchEvent(Event.removeStream, {"id": id});
+        }
+
         break;
       case "streamPropertyChanged":
         final eventStr = params["reason"];
         final id = params["connectionId"];
         final value = params["newValue"];
         final event = Event.values.firstWhere((e) => e.toString() == eventStr);
+
         _dispatchEvent(event, {"id": id, "value": value});
         break;
       default:

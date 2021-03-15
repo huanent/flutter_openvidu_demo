@@ -15,12 +15,7 @@ class Home extends StatelessWidget {
     final theme = Theme.of(context);
 
     void submit(TokenModel model) async {
-      final token = await Token(model.server, model.session).getToken();
-
-      Navigator.pushNamed(context, Chat.routeName, arguments: {
-        "token": token,
-        "userName": model.userName,
-      });
+      Navigator.pushNamed(context, Chat.routeName, arguments: model);
     }
 
     return Scaffold(

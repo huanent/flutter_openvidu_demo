@@ -1,4 +1,6 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:kooboo_openvidu/models/error.dart';
 import 'package:kooboo_openvidu/models/event.dart';
 import 'package:kooboo_openvidu/models/streamMode.dart';
 import 'package:kooboo_openvidu/session.dart';
@@ -48,6 +50,15 @@ class ChatModel extends ChangeNotifier {
   Session _session;
   bool get float => _oppositeStream != null;
 
+  OpenViduError _openViduError;
+
+  OpenViduError get openViduError => _openViduError;
+
+  set openViduError(OpenViduError openViduError) {
+    _openViduError = openViduError;
+    notifyListeners();
+  }
+
   Future<void> start(String token, String userName) async {
     if (_session != null) return;
 
@@ -69,17 +80,35 @@ class ChatModel extends ChangeNotifier {
       }
     });
 
-    await _session.connect(userName);
-    localStream = await _session.startLocalPreview(StreamMode.frontCamera);
-    _session.publishLocalStream();
+    _session.on(Event.error, (params) {
+      if (params.containsKey("error")) {
+        openViduError = params["error"];
+      } else {
+        openViduError = OtherError();
+      }
+    });
+
+    try {
+      await _session.connect(userName);
+      localStream = await _session.startLocalPreview(StreamMode.frontCamera);
+      _session.publishLocalStream();
+    } catch (e) {
+      openViduError = e;
+      await stop();
+    }
 
     //webrtc 结束
   }
 
   Future<void> stop() async {
     if (_session == null) return;
-    await _session?.disconnect();
-    await localStream?.dispose();
-    await oppositeStream?.dispose();
+
+    try {
+      await _session?.disconnect();
+      await localStream?.dispose();
+      await oppositeStream?.dispose();
+    } catch (e) {} finally {
+      _session = null;
+    }
   }
 }
