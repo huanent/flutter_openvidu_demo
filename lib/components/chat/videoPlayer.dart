@@ -19,9 +19,8 @@ class VideoPlayerState extends State<VideoPlayer> {
       await _render.initialize();
       _initialized = true;
     }
-    setState(() {
-      _render.srcObject = stream;
-    });
+    _render.srcObject = stream;
+    Future.delayed(Duration(milliseconds: 1000), () => setState(() {}));
   }
 
   @override

@@ -162,7 +162,7 @@ class Session {
 
   void _onRpcMessage(Map<String, dynamic> message) {
     if (!_active) return;
-    //print(message);
+    print(message);
     if (!message.containsKey("method")) return;
     final method = message["method"];
     final params = message["params"];

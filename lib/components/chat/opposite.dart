@@ -1,21 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_openvidu_demo/components/loading.dart';
 import 'package:flutter_openvidu_demo/models/chatModel.dart';
 import 'package:provider/provider.dart';
-import 'videoPlayer.dart';
+import 'package:flutter_webrtc/flutter_webrtc.dart';
 
 class Opposite extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final videoPlayerKey = GlobalKey<VideoPlayerState>();
-    return Consumer<ChatModel>(
-      builder: (context, value, child) {
-        if (videoPlayerKey.currentState != null) {
-          videoPlayerKey.currentState.changeStream(value.oppositeStream);
+    final render = RTCVideoRenderer();
+    return FutureBuilder(
+      future: render.initialize(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return Loading();
         }
 
-        return child;
+        return Consumer<ChatModel>(
+          builder: (context, value, child) {
+            render.srcObject = value.oppositeStream;
+            return RTCVideoView(
+              render,
+              objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
+            );
+          },
+        );
       },
-      child: VideoPlayer(videoPlayerKey, false),
     );
   }
 }

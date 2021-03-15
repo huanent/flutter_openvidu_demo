@@ -10,13 +10,18 @@ class Token {
   Future<Map<String, dynamic>> _getSession() async {
     var response = await _dio.get("$_server/api/Session/list");
     final sessions = response.data["content"] as List<dynamic>;
-    if (sessions.length > 0) {
-      return sessions[0];
-    } else {
-      response = await _dio.post("$_server/api/Session",
-          data: {"id": _session, "record": false});
-      return response.data["result"];
-    }
+    final session = sessions.firstWhere(
+      (element) => element["id"] == _session,
+      orElse: () => null,
+    );
+    if (session != null) return session;
+
+    response = await _dio.post(
+      "$_server/api/Session",
+      data: {"id": _session, "record": true},
+    );
+
+    return response.data["result"];
   }
 
   Future<Map<String, dynamic>> _getConnection(String sessionId) async {

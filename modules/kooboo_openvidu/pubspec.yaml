@@ -1,8 +1,8 @@
 name: kooboo_openvidu
-description: A new Flutter package project.
-version: 0.0.1
-author:
-homepage:
+description: openvidu sdk dart implement
+version: 0.1.0
+author: 
+homepage: 
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
