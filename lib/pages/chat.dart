@@ -3,6 +3,7 @@ import 'package:flutter_openvidu_demo/components/chat/ctrlBar.dart';
 import 'package:flutter_openvidu_demo/components/chat/errorDialog.dart';
 import 'package:flutter_openvidu_demo/components/chat/opposite.dart';
 import 'package:flutter_openvidu_demo/components/chat/self.dart';
+import 'package:flutter_openvidu_demo/components/loading.dart';
 import 'package:flutter_openvidu_demo/models/chatModel.dart';
 import 'package:flutter_openvidu_demo/models/tokenModel.dart';
 import 'package:flutter_openvidu_demo/utils/token.dart';
@@ -29,7 +30,7 @@ class Chat extends StatelessWidget {
               }),
               builder: (context, snapshot) {
                 if (snapshot.connectionState != ConnectionState.done) {
-                  return Container();
+                  return Loading();
                 }
 
                 return child;
