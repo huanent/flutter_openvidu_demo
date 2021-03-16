@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_openvidu_demo/components/chat/ctrlBar.dart';
 import 'package:flutter_openvidu_demo/components/chat/errorDialog.dart';
 import 'package:flutter_openvidu_demo/components/chat/opposite.dart';
+import 'package:flutter_openvidu_demo/components/chat/oppositeSettings.dart';
 import 'package:flutter_openvidu_demo/components/chat/self.dart';
 import 'package:flutter_openvidu_demo/components/loading.dart';
 import 'package:flutter_openvidu_demo/models/chatModel.dart';
@@ -47,7 +48,13 @@ class Chat extends StatelessWidget {
               Self(),
               Align(
                 alignment: Alignment.bottomCenter,
-                child: CtrlBar(),
+                child: Column(
+                  children: [
+                    Expanded(child: Container()),
+                    OppositeSettings(),
+                    CtrlBar(),
+                  ],
+                ),
               ),
               ErrorDialog(),
             ],

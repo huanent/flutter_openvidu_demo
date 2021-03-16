@@ -59,6 +59,36 @@ class ChatModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool _oppsiteVideo = true;
+
+  bool get oppsiteVideo => _oppsiteVideo;
+
+  set oppsiteVideo(bool oppsiteVideo) {
+    _oppsiteVideo = oppsiteVideo;
+    _session.setRemoteVideo(_oppositeId, oppsiteVideo);
+    notifyListeners();
+  }
+
+  bool _oppsiteAudio = true;
+
+  bool get oppsiteAudio => _oppsiteAudio;
+
+  set oppsiteAudio(bool oppsiteAudio) {
+    _oppsiteAudio = oppsiteAudio;
+    _session.setRemoteAudio(_oppositeId, oppsiteAudio);
+    notifyListeners();
+  }
+
+  bool _oppsiteSpeakerphone = false;
+
+  bool get oppsiteSpeakerphone => _oppsiteSpeakerphone;
+
+  set oppsiteSpeakerphone(bool oppsiteSpeakerphone) {
+    _oppsiteSpeakerphone = oppsiteSpeakerphone;
+    _session.setRemoteSpeakerphone(_oppositeId, oppsiteSpeakerphone);
+    notifyListeners();
+  }
+
   Future<void> start(String token, String userName) async {
     if (_session != null) return;
 

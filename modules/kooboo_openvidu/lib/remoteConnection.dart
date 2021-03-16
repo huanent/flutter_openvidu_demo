@@ -10,11 +10,17 @@ class RemoteConnection extends Connection {
 
   Future<void> subscribeStream(
     Function(Event event, Map<String, dynamic> params) dispatchEvent,
+    bool video,
+    bool audio,
+    bool speakerphone,
   ) async {
     final connection = await peerConnection;
 
     connection.onAddStream = (stream) {
       this.stream = stream;
+      enableVideo(video);
+      enableAudio(audio);
+      enableSpeakerphone(speakerphone);
       dispatchEvent(Event.addStream, {"id": id, "stream": stream});
     };
 

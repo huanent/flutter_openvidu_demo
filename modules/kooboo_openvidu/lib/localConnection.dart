@@ -42,8 +42,10 @@ class LocalConnection extends Connection {
     height = videoParams.height;
   }
 
-  Future<void> publishStream() async {
+  Future<void> publishStream(bool video, bool audio) async {
     final connection = await peerConnection;
+    enableVideo(video);
+    enableAudio(audio);
 
     switch (sdpSemantics) {
       case "plan-b":

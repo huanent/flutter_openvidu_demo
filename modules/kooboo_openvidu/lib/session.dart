@@ -70,7 +70,12 @@ class Session {
     }
   }
 
-  Future<void> publishLocalStream() => _localConnection.publishStream();
+  Future<void> publishLocalStream({
+    bool video = true,
+    bool audio = true,
+  }) {
+    return _localConnection.publishStream(video, audio);
+  }
 
   Future<void> publishVideo(bool enable) {
     return _localConnection.publishVideo(enable);
@@ -80,9 +85,34 @@ class Session {
     return _localConnection.publishAudio(enable);
   }
 
-  Future<void> subscribeRemoteStream(String id) async {
+  Future<void> subscribeRemoteStream(
+    String id, {
+    bool video = true,
+    bool audio = true,
+    bool speakerphone = false,
+  }) async {
     if (!_remoteConnections.containsKey(id)) return;
-    _remoteConnections[id].subscribeStream(_dispatchEvent);
+    _remoteConnections[id].subscribeStream(
+      _dispatchEvent,
+      video,
+      audio,
+      speakerphone,
+    );
+  }
+
+  void setRemoteVideo(String id, bool enable) {
+    if (!_remoteConnections.containsKey(id)) return;
+    _remoteConnections[id].enableVideo(enable);
+  }
+
+  void setRemoteAudio(String id, bool enable) {
+    if (!_remoteConnections.containsKey(id)) return;
+    _remoteConnections[id].enableAudio(enable);
+  }
+
+  void setRemoteSpeakerphone(String id, bool enable) {
+    if (!_remoteConnections.containsKey(id)) return;
+    _remoteConnections[id].enableSpeakerphone(enable);
   }
 
   void on(Event event, Function(Map<String, dynamic> params) handler) {

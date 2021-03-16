@@ -2,12 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_openvidu_demo/models/chatModel.dart';
 import 'package:provider/provider.dart';
 
-class CtrlBar extends StatefulWidget {
-  @override
-  _CtrlBarState createState() => _CtrlBarState();
-}
-
-class _CtrlBarState extends State<CtrlBar> {
+class CtrlBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
