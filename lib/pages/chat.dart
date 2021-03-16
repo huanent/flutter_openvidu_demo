@@ -20,8 +20,6 @@ class Chat extends StatelessWidget {
   Widget build(BuildContext context) {
     final tokenModel = ModalRoute.of(context).settings.arguments as TokenModel;
 
-    if (Platform.isAndroid) {}
-
     return Scaffold(
       body: ChangeNotifierProvider(
           create: (context) => ChatModel(),

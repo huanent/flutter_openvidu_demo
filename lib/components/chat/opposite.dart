@@ -4,10 +4,16 @@ import 'package:flutter_openvidu_demo/models/chatModel.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
-class Opposite extends StatelessWidget {
+class Opposite extends StatefulWidget {
+  @override
+  _OppositeState createState() => _OppositeState();
+}
+
+class _OppositeState extends State<Opposite> {
+  final render = RTCVideoRenderer();
+
   @override
   Widget build(BuildContext context) {
-    final render = RTCVideoRenderer();
     return FutureBuilder(
       future: render.initialize(),
       builder: (context, snapshot) {
@@ -26,5 +32,11 @@ class Opposite extends StatelessWidget {
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    render.dispose();
+    super.dispose();
   }
 }

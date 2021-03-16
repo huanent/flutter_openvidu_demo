@@ -4,11 +4,16 @@ import 'package:flutter_openvidu_demo/models/chatModel.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
-class Self extends StatelessWidget {
+class Self extends StatefulWidget {
+  @override
+  _SelfState createState() => _SelfState();
+}
+
+class _SelfState extends State<Self> {
+  final render = RTCVideoRenderer();
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final render = RTCVideoRenderer();
 
     return FutureBuilder(
       future: render.initialize(),
@@ -39,5 +44,11 @@ class Self extends StatelessWidget {
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    render.dispose();
+    super.dispose();
   }
 }
