@@ -19,12 +19,22 @@ abstract class Connection {
     'optional': [],
   };
 
+  String get sdpSemantics =>
+      WebRTC.platformIsWindows ? 'plan-b' : 'unified-plan';
+
+  final Map<String, dynamic> _config = {
+    'mandatory': {},
+    'optional': [
+      {'DtlsSrtpKeyAgreement': true},
+    ]
+  };
+
   Connection(this.id, this.token, this.rpc) {
     peerConnection = _getPeerConnection();
   }
 
   Future<RTCPeerConnection> _getPeerConnection() async {
-    final connection = await createPeerConnection(_getConfiguration());
+    final connection = await createPeerConnection(_getConfiguration(), _config);
 
     connection.onIceCandidate = (candidate) {
       Map<String, dynamic> iceCandidateParams = {
@@ -46,6 +56,7 @@ abstract class Connection {
     final turn2 = "$turn1?transport=tcp";
 
     return {
+      "sdpSemantics": sdpSemantics,
       'iceServers': [
         {
           "urls": [stun]

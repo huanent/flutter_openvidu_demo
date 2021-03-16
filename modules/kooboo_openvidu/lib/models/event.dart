@@ -6,5 +6,7 @@ enum Event {
   addStream,
   removeStream,
   publishVideo,
-  publishAudio
+  publishAudio,
+  audioActive,
+  videoActive,
 }

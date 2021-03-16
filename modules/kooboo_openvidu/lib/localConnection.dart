@@ -44,7 +44,19 @@ class LocalConnection extends Connection {
 
   Future<void> publishStream() async {
     final connection = await peerConnection;
-    connection.addStream(stream);
+
+    switch (sdpSemantics) {
+      case "plan-b":
+        connection.addStream(stream);
+        break;
+      case "unified-plan":
+        stream.getTracks().forEach((track) {
+          connection.addTrack(track, stream);
+        });
+        break;
+      default:
+    }
+
     final offer = await connection.createOffer(constraints);
     connection.setLocalDescription(offer);
 

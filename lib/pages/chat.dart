@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_openvidu_demo/components/chat/ctrlBar.dart';
 import 'package:flutter_openvidu_demo/components/chat/errorDialog.dart';
@@ -16,6 +18,8 @@ class Chat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokenModel = ModalRoute.of(context).settings.arguments as TokenModel;
+
+    if (Platform.isAndroid) {}
 
     return Scaffold(
       body: ChangeNotifierProvider(

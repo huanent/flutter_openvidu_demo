@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_openvidu_demo/components/home/homeForm.dart';
 import 'package:flutter_openvidu_demo/models/tokenModel.dart';
+import 'package:flutter_openvidu_demo/utils/permission.dart';
 
 import 'package:provider/provider.dart';
 
@@ -12,6 +13,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    PermissionChecker.check();
 
     void submit(TokenModel model) async {
       Navigator.pushNamed(context, Chat.routeName, arguments: model);
