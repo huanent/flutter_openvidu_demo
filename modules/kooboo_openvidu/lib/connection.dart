@@ -79,8 +79,7 @@ abstract class Connection {
 
   void enableVideo(bool enable) {
     if (stream == null) return;
-
-    this.stream.getVideoTracks().forEach((track) {
+    stream.getVideoTracks().forEach((track) {
       track.enabled = enable;
     });
   }
@@ -88,7 +87,7 @@ abstract class Connection {
   void enableAudio(bool enable) {
     if (stream == null) return;
 
-    this.stream.getAudioTracks().forEach((track) {
+    stream.getAudioTracks().forEach((track) {
       track.enabled = enable;
     });
   }
@@ -96,7 +95,7 @@ abstract class Connection {
   void enableSpeakerphone(bool enable) {
     if (stream == null) return;
 
-    this.stream.getAudioTracks().forEach((track) {
+    stream.getAudioTracks().forEach((track) {
       track.enableSpeakerphone(enable);
     });
   }
