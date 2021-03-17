@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_openvidu_demo/components/chat/ctrlBar.dart';
 import 'package:flutter_openvidu_demo/components/chat/errorDialog.dart';
