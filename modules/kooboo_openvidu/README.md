@@ -7,12 +7,14 @@ openvidu sdk dart implement
 ### Session
 -----------
 #### 构造函数
+
 |参数名|说明|
 |-----|-----|
 |url|由后端提供,用户进入直播间的token|
 
 ------------
 #### connect
+
 说明:与服务器建立连接
 
 |参数名|说明|
@@ -21,10 +23,12 @@ openvidu sdk dart implement
 
 ------------
 #### disconnect
+
 说明:与服务器断开连接,并清理资源
 
 ------------
 #### startLocalPreview
+
 说明:开启本地视频预览(无需与服务器建立连接)
 
 |参数名|说明|
@@ -34,10 +38,12 @@ openvidu sdk dart implement
 
 ------------
 #### stopLocalPreview
+
 说明:关闭本地视频预览
 ------------
 
 #### publishLocalStream
+
 说明:发布本地流到服务器(stopLocalPreview之后调用)
 
 |参数名|说明|
@@ -48,6 +54,7 @@ openvidu sdk dart implement
 ------------
 
 #### publishVideo
+
 说明:改变发布视频状态
 
 |参数名|说明|
@@ -57,6 +64,7 @@ openvidu sdk dart implement
 ------------
 
 #### publishAudio
+
 说明:改变发布音频状态
 
 |参数名|说明|
@@ -66,6 +74,7 @@ openvidu sdk dart implement
 ------------
 
 #### subscribeRemoteStream
+
 说明:订阅远端用户流
 
 |参数名|说明|
@@ -74,9 +83,11 @@ openvidu sdk dart implement
 |video|是否开启视频|
 |audio|是否开启视音频|
 |speakerphone|是否开启扬声器播放声音,默认是听筒|
+
 ------------
 
 #### setRemoteVideo
+
 说明:设置是否开启远端流的视频(目前ios13以上的无效,等待flutter_webrtc官方修复)
 
 |参数名|说明|
@@ -87,6 +98,7 @@ openvidu sdk dart implement
 ------------
 
 #### setRemoteAudio
+
 说明:设置是否开启远端流的音频(目前ios13以上的无效,等待flutter_webrtc官方修复)
 
 |参数名|说明|
@@ -97,6 +109,7 @@ openvidu sdk dart implement
 ------------
 
 #### setRemoteSpeakerphone
+
 说明:设置是否开启远端流的扬声器播放
 
 |参数名|说明|
@@ -107,6 +120,7 @@ openvidu sdk dart implement
 ------------
 
 #### on
+
 说明:设置事件回调
 
 |参数名|说明|
