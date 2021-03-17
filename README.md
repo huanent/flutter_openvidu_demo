@@ -11,7 +11,8 @@ sdk包名为```kooboo_openvidu```
 * flutter_webrtc 
 
 ## SDK API
-```https://pub.dev/packages/kooboo_openvidu```
+
+https://pub.dev/packages/kooboo_openvidu
 
 ### 开始通话示例
 ```
