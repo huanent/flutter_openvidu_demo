@@ -51,7 +51,6 @@ class JsonRpc {
     dict['jsonrpc'] = '2.0';
     if (params != null) dict["params"] = params;
     String jsonString = json.encode(dict);
-    print(jsonString);
     _channel.sink.add(jsonString);
     if (!(hasResult ?? false)) return null;
 

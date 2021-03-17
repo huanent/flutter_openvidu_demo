@@ -161,14 +161,14 @@ class Session {
 
   Future<void> _heartbeat() async {
     try {
-      await _rpc.send("ping", params: {"interval": 5000}, hasResult: true);
+      await _rpc.send("ping", params: {"interval": 3000}, hasResult: true);
     } catch (e) {
       _dispatchEvent(Event.error, {"error": NetworkError()});
     }
 
     Future<void> loop() async {
       while (_active) {
-        await Future.delayed(Duration(seconds: 4));
+        await Future.delayed(Duration(seconds: 3));
         if (!_active) break;
 
         try {
