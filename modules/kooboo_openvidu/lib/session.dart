@@ -76,6 +76,8 @@ class Session {
     }
   }
 
+  Future<void> stopLocalPreview() async => StreamCreator.dispose();
+
   Future<void> publishLocalStream({
     bool video = true,
     bool audio = true,
