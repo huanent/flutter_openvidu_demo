@@ -29,7 +29,7 @@ class Chat extends StatelessWidget {
               future: Future(() async {
                 final token = await Token(tokenModel.server, tokenModel.session)
                     .getToken();
-                await model.start(token, tokenModel.userName);
+                await model.start(token + "aa", tokenModel.userName);
               }),
               builder: (context, snapshot) {
                 if (snapshot.connectionState != ConnectionState.done) {

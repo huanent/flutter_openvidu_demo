@@ -136,7 +136,7 @@ class Session {
         hasResult: true,
       );
     } catch (e) {
-      _dispatchEvent(Event.error, null);
+      _dispatchEvent(Event.error, {"error": TokenError()});
       throw e;
     }
   }

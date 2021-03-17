@@ -7,6 +7,7 @@ class OpenViduError extends Error {
 enum OpenViduErrorCode {
   NotPermission,
   Network,
+  Token,
   Other,
 }
 
@@ -15,6 +16,14 @@ class NotPermissionError extends OpenViduError {
       : super(
           OpenViduErrorCode.NotPermission,
           "No permissions, please manually give camera and microphone permissions",
+        );
+}
+
+class TokenError extends OpenViduError {
+  TokenError()
+      : super(
+          OpenViduErrorCode.Token,
+          "Token is invalid or expired",
         );
 }
 
