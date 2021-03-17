@@ -145,8 +145,6 @@ class ChatModel extends ChangeNotifier {
   @override
   void dispose() {
     _session?.disconnect();
-    localStream?.dispose();
-    oppositeStream?.dispose();
     super.dispose();
   }
 }

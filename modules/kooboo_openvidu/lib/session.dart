@@ -36,16 +36,24 @@ class Session {
   Future<void> connect([String userName]) async {
     _userName = userName ?? DateTime.now().millisecondsSinceEpoch;
     final url = "wss://${_token.host}/openvidu?sessionId=${_token.sessionId}";
+    _rpc = JsonRpc(onMessage: _onRpcMessage);
+
     try {
-      _rpc = JsonRpc(onMessage: _onRpcMessage);
       _rpc.connect(url);
       _heartbeat();
-      final response = await _joinRoom(_userName);
-      _dispatchEvent(Event.joinRoom, null);
+    } catch (e) {
+      _rpc.disconnect();
+      throw NetworkError();
+    }
+
+    final response = await _joinRoom(_userName);
+    _dispatchEvent(Event.joinRoom, null);
+
+    try {
       _localConnection = LocalConnection(response["id"], _token, _rpc);
       _addAlreadyInRoomConnections(response);
     } catch (e) {
-      throw NetworkError();
+      throw OtherError();
     }
   }
 
@@ -62,9 +70,7 @@ class Session {
   }) async {
     videoParams = videoParams ?? VideoParams.middle;
     try {
-      final stream = await StreamCreator.create(mode, videoParams: videoParams);
-      _localConnection.setStream(stream, mode, videoParams);
-      return stream;
+      return await StreamCreator.create(mode, videoParams: videoParams);
     } catch (e) {
       throw NotPermissionError();
     }
@@ -74,6 +80,16 @@ class Session {
     bool video = true,
     bool audio = true,
   }) {
+    if (StreamCreator.stream == null) {
+      throw "Please call startLocalPreview first";
+    }
+
+    _localConnection.setStream(
+      StreamCreator.stream,
+      StreamCreator.mode,
+      StreamCreator.videoParams,
+    );
+
     return _localConnection.publishStream(video, audio);
   }
 
@@ -136,8 +152,8 @@ class Session {
         hasResult: true,
       );
     } catch (e) {
-      _dispatchEvent(Event.error, {"error": TokenError()});
-      throw e;
+      if (e["code"] == 401) throw TokenError();
+      throw OtherError();
     }
   }
 
@@ -192,7 +208,6 @@ class Session {
 
   void _onRpcMessage(Map<String, dynamic> message) {
     if (!_active) return;
-    print(message);
     if (!message.containsKey("method")) return;
     final method = message["method"];
     final params = message["params"];
@@ -228,7 +243,6 @@ class Session {
         final id = params["connectionId"];
         final value = params["newValue"];
         final event = Event.values.firstWhere((e) => e.toString() == eventStr);
-
         _dispatchEvent(event, {"id": id, "value": value});
         break;
       default:

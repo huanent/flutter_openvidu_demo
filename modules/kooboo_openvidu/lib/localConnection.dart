@@ -5,6 +5,7 @@ import 'models/token.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'connection.dart';
 import 'models/videoParams.dart';
+import 'streamCreator.dart';
 
 class LocalConnection extends Connection {
   LocalConnection(String id, Token token, JsonRpc rpc) : super(id, token, rpc);
@@ -112,5 +113,11 @@ class LocalConnection extends Connection {
         "reason": reason,
       },
     );
+  }
+
+  @override
+  Future<void> close() {
+    StreamCreator.dispose();
+    return super.close();
   }
 }

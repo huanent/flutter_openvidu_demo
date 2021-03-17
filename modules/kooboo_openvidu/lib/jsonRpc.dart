@@ -31,7 +31,13 @@ class JsonRpc {
     });
   }
 
-  Future<dynamic> disconnect() => _channel.sink.close();
+  Future<dynamic> disconnect() {
+    try {
+      return _channel?.sink?.close();
+    } catch (e) {
+      return Future.value(null);
+    }
+  }
 
   Future<dynamic> send(
     String method, {
