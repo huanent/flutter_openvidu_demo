@@ -4,6 +4,7 @@ import 'package:flutter_openvidu_demo/components/chat/errorDialog.dart';
 import 'package:flutter_openvidu_demo/components/chat/opposite.dart';
 import 'package:flutter_openvidu_demo/components/chat/oppositeSettings.dart';
 import 'package:flutter_openvidu_demo/components/chat/self.dart';
+import 'package:flutter_openvidu_demo/components/chat/switchCamera.dart';
 import 'package:flutter_openvidu_demo/components/loading.dart';
 import 'package:flutter_openvidu_demo/models/chatModel.dart';
 import 'package:flutter_openvidu_demo/models/tokenModel.dart';
@@ -23,6 +24,7 @@ class Chat extends StatelessWidget {
           create: (context) => ChatModel(),
           builder: (context, child) {
             final model = Provider.of<ChatModel>(context, listen: false);
+
             return FutureBuilder(
               future: Future(() async {
                 final token = await Token(tokenModel.server, tokenModel.session)
@@ -52,6 +54,7 @@ class Chat extends StatelessWidget {
                   ],
                 ),
               ),
+              SwitchCamera(),
               ErrorDialog(),
             ],
           )),

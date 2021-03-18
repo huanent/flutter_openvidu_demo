@@ -142,6 +142,8 @@ class ChatModel extends ChangeNotifier {
     }
   }
 
+  void switchCamera() => _session.switchCamera();
+
   @override
   void dispose() {
     _session?.disconnect();

@@ -42,6 +42,11 @@ openvidu sdk dart implement
 说明:关闭本地视频预览
 ------------
 
+#### switchCamera
+
+说明:切换前后摄像头
+------------
+
 #### publishLocalStream
 
 说明:发布本地流到服务器(stopLocalPreview之后调用)

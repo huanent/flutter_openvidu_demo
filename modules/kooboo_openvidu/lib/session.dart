@@ -78,6 +78,13 @@ class Session {
 
   Future<void> stopLocalPreview() async => StreamCreator.dispose();
 
+  void switchCamera() async {
+    if (StreamCreator.stream == null) return;
+    final tracks = StreamCreator.stream.getVideoTracks();
+    if (tracks.length == 0) return;
+    Helper.switchCamera(tracks[0]);
+  }
+
   Future<void> publishLocalStream({
     bool video = true,
     bool audio = true,
