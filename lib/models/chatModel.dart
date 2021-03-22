@@ -123,7 +123,7 @@ class ChatModel extends ChangeNotifier {
       localStream = await _session.startLocalPreview(StreamMode.frontCamera);
       _session.publishLocalStream();
     } catch (e) {
-      openViduError = e;
+      openViduError = e is OpenViduError ? e : OtherError();
       await stop();
     }
 
