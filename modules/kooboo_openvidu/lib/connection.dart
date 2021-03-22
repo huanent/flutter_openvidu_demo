@@ -29,6 +29,8 @@ abstract class Connection {
     ]
   };
 
+  final List<RTCIceCandidate> _candidateTemps = [];
+
   Connection(this.id, this.token, this.rpc) {
     peerConnection = _getPeerConnection();
   }
@@ -43,16 +45,23 @@ abstract class Connection {
         'candidate': candidate.candidate,
         "endpointName": id
       };
-
+      print(iceCandidateParams);
       rpc.send("onIceCandidate", params: iceCandidateParams);
+    };
+
+    connection.onSignalingState = (state) {
+      if (state == RTCSignalingState.RTCSignalingStateStable) {
+        _candidateTemps.forEach((i) => connection.addCandidate(i));
+        _candidateTemps.clear();
+      }
     };
 
     return connection;
   }
 
   Map<String, dynamic> _getConfiguration() {
-    final stun = "stun:$token.coturnIp:3478";
-    final turn1 = "turn:$token.coturnIp:3478";
+    final stun = "stun:${token.coturnIp}:3478";
+    final turn1 = "turn:${token.coturnIp}:3478";
     final turn2 = "$turn1?transport=tcp";
 
     return {
@@ -98,5 +107,20 @@ abstract class Connection {
     stream.getAudioTracks().forEach((track) {
       track.enableSpeakerphone(enable);
     });
+  }
+
+  Future<void> addIceCandidate(Map<String, dynamic> candidate) async {
+    var connection = await peerConnection;
+    final rtcIceCandidate = RTCIceCandidate(
+      candidate["candidate"],
+      candidate["sdpMid"],
+      candidate["sdpMLineIndex"],
+    );
+    if (connection.signalingState ==
+        RTCSignalingState.RTCSignalingStateStable) {
+      await connection.addCandidate(rtcIceCandidate);
+    } else {
+      _candidateTemps.add(rtcIceCandidate);
+    }
   }
 }

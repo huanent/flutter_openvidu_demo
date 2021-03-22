@@ -30,4 +30,16 @@ class Token {
     _turnUsername = uri.queryParameters["turnUsername"];
     _turnCredential = uri.queryParameters["turnCredential"];
   }
+
+  void appendInfo({
+    String role,
+    String coturnIp,
+    String turnUsername,
+    String turnCredential,
+  }) {
+    if (role != null) _role = role;
+    if (coturnIp != null) _coturnIp = coturnIp;
+    if (turnUsername != null) _turnUsername = turnUsername;
+    if (turnCredential != null) _turnCredential = turnCredential;
+  }
 }

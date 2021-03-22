@@ -22,3 +22,7 @@
 
 * Add switchCamera
 
+## [0.2.0] - 2021.3.18
+
+* Add addIceCandidate
+

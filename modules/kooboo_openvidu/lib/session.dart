@@ -47,6 +47,14 @@ class Session {
     }
 
     final response = await _joinRoom(_userName);
+
+    _token.appendInfo(
+      role: response["role"],
+      coturnIp: response["coturnIp"],
+      turnCredential: response["turnCredential"],
+      turnUsername: response["turnUsername"],
+    );
+
     _dispatchEvent(Event.joinRoom, null);
 
     try {
@@ -216,6 +224,7 @@ class Session {
   }
 
   void _onRpcMessage(Map<String, dynamic> message) {
+    print(message);
     if (!_active) return;
     if (!message.containsKey("method")) return;
     final method = message["method"];
@@ -225,13 +234,16 @@ class Session {
       case "participantJoined":
         _addRemoteConnection(params);
         break;
-
       case "participantPublished":
         final id = params["id"];
         _dispatchEvent(Event.userPublished, {"id": id});
         break;
       case "participantJoined":
         _addRemoteConnection(params);
+        break;
+      case "iceCandidate":
+        var id = params["senderConnectionId"];
+        _allConnection.firstWhere((c) => c.id == id).addIceCandidate(params);
         break;
       case "participantLeft":
         final id = params["connectionId"];
@@ -251,7 +263,11 @@ class Session {
         final eventStr = params["reason"];
         final id = params["connectionId"];
         final value = params["newValue"];
-        final event = Event.values.firstWhere((e) => e.toString() == eventStr);
+
+        final event = Event.values.firstWhere((e) {
+          return e.toString().split(".")[1] == eventStr;
+        });
+
         _dispatchEvent(event, {"id": id, "value": value});
         break;
       default:
