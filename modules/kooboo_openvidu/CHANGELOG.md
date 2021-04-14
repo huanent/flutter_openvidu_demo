@@ -26,3 +26,6 @@
 
 * Add addIceCandidate
 
+## [0.2.1] - 2021.4.14
+
+* Add docs
