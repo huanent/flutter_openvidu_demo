@@ -134,3 +134,22 @@ openvidu sdk dart implement
 |handler|回调|
 
 ------------
+
+### event
+
+* joinRoom 自己成功进入房间
+* userJoined 远端用户进入房间
+* userPublished 远端用户发布了视频流,此时还没有收到流,需要手动订阅_session.subscribeRemoteStream
+* error 出现错误,出现错误后需要重新申请token后重连房间
+* addStream 收到了远端流
+* removeStream 远端流被移除
+* publishVideo 内部事件
+* publishAudio 内部事件
+* udioActive 内部事件
+* videoActive 内部事件
+
+### error
+* NotPermissionError 无设备权限
+* TokenError token验证失败
+* NetworkError 网络错误
+* OtherError 其他未知错误
