@@ -21,7 +21,7 @@ class Token {
       data: {"id": _session, "record": true},
     );
 
-    return response.data["result"];
+    return response.data;
   }
 
   Future<Map<String, dynamic>> _getConnection(String sessionId) async {
