@@ -33,11 +33,16 @@ class FloatPanel extends StatelessWidget {
         );
       },
       selector: (ctx, s) => s.float,
-      child: Stack(
-        children: [
-          isAudio ? AudioPanel() : VideoPanel(),
-          Ctrl(),
-        ],
+      child: ClipRect(
+        child: Align(
+          child: Stack(
+            children: [
+              isAudio ? AudioPanel() : VideoPanel(),
+              Ctrl(),
+            ],
+          ),
+          alignment: Alignment.center,
+        ),
       ),
     );
   }
