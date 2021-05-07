@@ -5,26 +5,40 @@ import 'package:provider/provider.dart';
 import 'opposite.dart';
 import 'self.dart';
 
-class VideoPanel extends StatelessWidget {
+class VideoPanel extends StatefulWidget {
   const VideoPanel({Key key}) : super(key: key);
 
   @override
+  _VideoPanelState createState() => _VideoPanelState();
+}
+
+class _VideoPanelState extends State<VideoPanel> {
+  final self = Self();
+  final opposite = Opposite();
+
+  @override
   Widget build(BuildContext context) {
-    final callModel = context.read<CallModel>();
+    final srceen = MediaQuery.of(context);
 
     return Stack(
       children: [
-        Opposite(),
+        opposite,
         Selector<CallModel, bool>(
-          builder: (context, float, child) {
-            return Visibility(
-              child: child,
-              visible: !float || callModel.oppositeStream == null,
-            );
+          builder: (context, value, child) {
+            if (value) {
+              return Positioned(
+                child: self,
+                width: 100,
+                height: 150,
+                right: 20 + srceen.padding.right,
+                top: 20 + srceen.padding.top,
+              );
+            } else {
+              return self;
+            }
           },
-          selector: (ctx, s) => s.float,
-          child: Self(),
-        ),
+          selector: (ctx, s) => s.floatSelf,
+        )
       ],
     );
   }

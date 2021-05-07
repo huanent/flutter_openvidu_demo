@@ -2,29 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_openvidu_demo/components/common/mediaStreamView.dart';
 import 'package:flutter_openvidu_demo/models/callModel.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_webrtc/flutter_webrtc.dart';
 
 class Self extends StatelessWidget {
-  const Self({Key key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    final srceen = MediaQuery.of(context);
-    final callModel = context.read<CallModel>();
+    final localStream = context.select<CallModel, MediaStream>(
+      (value) => value.localStream,
+    );
 
-    return Selector<CallModel, bool>(
-      builder: (context, float, child) {
-        return child;
-      },
-      selector: (ctx, r) => r.oppositeStream != null,
+    final hiddenLocal = context.select<CallModel, bool>(
+      (value) => value.hiddenLocal,
+    );
+
+    return Visibility(
       child: ClipRect(
         child: Align(
           child: MediaStreamView(
-            stream: callModel.localStream,
+            stream: localStream,
             mirror: true,
           ),
           alignment: Alignment.center,
         ),
       ),
+      visible: !hiddenLocal,
     );
   }
 }

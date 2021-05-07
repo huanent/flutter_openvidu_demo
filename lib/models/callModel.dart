@@ -16,6 +16,9 @@ class CallModel extends ChangeNotifier {
   MediaStream get localStream => _localStream;
   MediaStream get oppositeStream => _oppositeStream;
   bool get float => _float;
+  bool get floatSelf => _oppositeStream != null;
+  bool get hiddenLocal => floatSelf && _float;
+  OpenViduError get error => _error;
 
   set float(bool value) {
     _float = value;

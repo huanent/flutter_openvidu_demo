@@ -21,26 +21,19 @@ class _MediaStreamViewState extends State<MediaStreamView> {
   RTCVideoRenderer _render;
 
   @override
-  void initState() {
-    if (widget.stream != null) _render = RTCVideoRenderer();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    if (widget.stream == null) return Container(color: Colors.grey);
+    _render = RTCVideoRenderer();
+
     return FutureWrapper(
-      future: _render?.initialize(),
+      future: _render.initialize(),
       builder: (context) {
-        if (_render != null) {
-          _render.srcObject = widget.stream;
-          return RTCVideoView(
-            _render,
-            objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
-            mirror: widget.mirror,
-          );
-        } else {
-          return SizedBox.expand();
-        }
+        _render.srcObject = widget.stream;
+        return RTCVideoView(
+          _render,
+          objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
+          mirror: widget.mirror,
+        );
       },
     );
   }
