@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_openvidu_demo/models/chatModel.dart';
-import 'package:flutter_openvidu_demo/pages/chat.dart';
+import 'package:flutter_openvidu_demo/pages/conversation.dart';
 import 'package:provider/provider.dart';
 
 class ErrorDialog extends StatelessWidget {
@@ -37,7 +37,7 @@ class ErrorDialog extends StatelessWidget {
           if (result == true) {
             Navigator.pushNamed(
               context,
-              Chat.routeName,
+              Conversation.routeName,
               arguments: arguments,
             );
           }
