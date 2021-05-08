@@ -1,7 +1,7 @@
 # flutter_openvidu_demo
 ### 仓库包含 openvidu的flutter SDK 源码与演示demo
 
-sdk包名为```kooboo_openvidu```
+sdk包名为```kooboo_openvidu``` 版本不低于0.3.0
 
 地址:```https://pub.dev/packages/kooboo_openvidu```
 
