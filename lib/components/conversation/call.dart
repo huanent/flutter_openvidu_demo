@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_openvidu_demo/components/common/futureWrapper.dart';
-import 'package:flutter_openvidu_demo/components/conversation/call/callPanel.dart';
-import 'package:flutter_openvidu_demo/components/conversation/call/timer.dart';
 import 'package:flutter_openvidu_demo/models/callModel.dart';
 import 'package:flutter_openvidu_demo/models/conversationModel.dart';
 import 'package:flutter_openvidu_demo/models/tokenModel.dart';
@@ -9,6 +7,8 @@ import 'package:kooboo_openvidu/models/streamMode.dart';
 import 'package:provider/provider.dart';
 
 import 'call/errorDialog.dart';
+import 'call/callPanel.dart';
+import 'call/timer.dart';
 
 class Call extends StatelessWidget {
   @override
