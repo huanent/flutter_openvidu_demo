@@ -2,8 +2,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_openvidu_demo/models/callModel.dart';
 import 'package:provider/provider.dart';
 
-import 'opposite.dart';
-import 'self.dart';
+import 'video/opposite.dart';
+import 'video/self.dart';
 
 class VideoPanel extends StatefulWidget {
   const VideoPanel({Key key}) : super(key: key);

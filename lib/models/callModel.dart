@@ -82,14 +82,7 @@ class CallModel extends ChangeNotifier {
   }
 
   Future<void> stop() async {
-    //在未connect的情况下需要手动释放这个对象
-    await _localStream?.dispose();
-
-    try {
-      //在未connect的情况下可能会有异常抛出
-      await _session?.disconnect();
-    } catch (e) {}
-
+    await _session?.disconnect();
     _session = null;
   }
 }

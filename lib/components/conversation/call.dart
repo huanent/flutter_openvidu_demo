@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_openvidu_demo/components/common/futureWrapper.dart';
-import 'package:flutter_openvidu_demo/components/conversation/call/floatPanel.dart';
+import 'package:flutter_openvidu_demo/components/conversation/call/callPanel.dart';
 import 'package:flutter_openvidu_demo/models/callModel.dart';
 import 'package:flutter_openvidu_demo/models/conversationModel.dart';
 import 'package:flutter_openvidu_demo/models/tokenModel.dart';
@@ -31,8 +31,15 @@ class Call extends StatelessWidget {
         return FutureWrapper(
           future: future,
           builder: (context) {
-            return FloatPanel(
-              isAudio: _isAudio(conversationModel),
+            return Selector<CallModel, bool>(
+              builder: (context, value, child) {
+                //如果发现对方已经在房间内推流,而自己还没有推,则立即推流
+                if (!callModel.enterd && value) callModel.enter();
+
+                return child;
+              },
+              selector: (ctx, s) => s.floatSelf,
+              child: CallPanel(isAudio: _isAudio(conversationModel)),
             );
           },
         );

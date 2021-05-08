@@ -8,9 +8,9 @@ import 'package:provider/provider.dart';
 import 'audioPanel.dart';
 import 'videoPanel.dart';
 
-class FloatPanel extends StatelessWidget {
+class CallPanel extends StatelessWidget {
   final bool isAudio;
-  const FloatPanel({Key key, this.isAudio = false}) : super(key: key);
+  const CallPanel({Key key, this.isAudio = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

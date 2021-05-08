@@ -67,9 +67,10 @@ class Session {
 
   Future<void> disconnect() async {
     _active = false;
-    await _rpc.send("leaveRoom");
+    await _rpc?.send("leaveRoom");
     await Future.wait(_allConnection.map((e) => e?.close()));
-    await _rpc.disconnect();
+    if (_localConnection == null) StreamCreator.stream?.dispose();
+    await _rpc?.disconnect();
   }
 
   Future<MediaStream> startLocalPreview(

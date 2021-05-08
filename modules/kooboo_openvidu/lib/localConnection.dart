@@ -9,11 +9,11 @@ import 'streamCreator.dart';
 
 class LocalConnection extends Connection {
   LocalConnection(String id, Token token, JsonRpc rpc) : super(id, token, rpc);
-  bool audioOnly;
-  bool hasAudio;
-  bool hasVideo;
-  bool audioActive;
-  bool videoActive;
+  bool audioOnly = true;
+  bool hasAudio = true;
+  bool hasVideo = false;
+  bool audioActive = true;
+  bool videoActive = false;
   String typeOfVideo = "CAMERA";
   int frameRate;
   int width;
