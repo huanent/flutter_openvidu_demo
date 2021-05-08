@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_openvidu_demo/components/common/futureWrapper.dart';
 import 'package:flutter_openvidu_demo/components/conversation/call/callPanel.dart';
+import 'package:flutter_openvidu_demo/components/conversation/call/timer.dart';
 import 'package:flutter_openvidu_demo/models/callModel.dart';
 import 'package:flutter_openvidu_demo/models/conversationModel.dart';
 import 'package:flutter_openvidu_demo/models/tokenModel.dart';
 import 'package:kooboo_openvidu/models/streamMode.dart';
 import 'package:provider/provider.dart';
+
+import 'call/errorDialog.dart';
 
 class Call extends StatelessWidget {
   @override
@@ -39,7 +42,14 @@ class Call extends StatelessWidget {
                 return child;
               },
               selector: (ctx, s) => s.floatSelf,
-              child: CallPanel(isAudio: _isAudio(conversationModel)),
+              child: Stack(
+                children: [
+                  CallPanel(isAudio: _isAudio(conversationModel)),
+                  Timer(),
+                  ErrorDialog()
+                ],
+                fit: StackFit.expand,
+              ),
             );
           },
         );

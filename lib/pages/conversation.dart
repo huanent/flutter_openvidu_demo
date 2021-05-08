@@ -17,8 +17,8 @@ class Conversation extends StatelessWidget {
             children: [
               Chat(),
               Selector<ConversationModel, bool>(
-                builder: (context, inCall, child) {
-                  return inCall ? Call() : SizedBox.shrink();
+                builder: (context, call, child) {
+                  return call ? Call() : SizedBox.expand();
                 },
                 selector: (ctx, s) => s.callMode != CallMode.None,
               ),

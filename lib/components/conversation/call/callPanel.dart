@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_openvidu_demo/components/conversation/call/ctrl.dart';
-import 'package:flutter_openvidu_demo/components/conversation/call/errorDialog.dart';
+import 'ctrlPanel.dart';
 import 'package:flutter_openvidu_demo/models/callModel.dart';
 import 'package:provider/provider.dart';
 
@@ -39,8 +38,7 @@ class CallPanel extends StatelessWidget {
           child: Stack(
             children: [
               isAudio ? AudioPanel() : VideoPanel(),
-              Ctrl(),
-              ErrorDialog()
+              CtrlPanel(),
             ],
           ),
           alignment: Alignment.center,
