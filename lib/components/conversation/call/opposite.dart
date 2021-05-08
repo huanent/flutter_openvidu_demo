@@ -7,8 +7,14 @@ import 'package:provider/provider.dart';
 class Opposite extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final callModel = context.read<CallModel>();
     return Selector<CallModel, MediaStream>(
       builder: (context, value, child) {
+        //如果发现对方已经在房间内推流,而自己还没有推,则立即推流
+        if (!callModel.enterd && value != null) {
+          callModel.enter();
+        }
+
         return MediaStreamView(
           stream: value,
           mirror: true,

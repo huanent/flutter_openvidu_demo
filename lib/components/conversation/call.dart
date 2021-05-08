@@ -16,7 +16,7 @@ class Call extends StatelessWidget {
     return ChangeNotifierProvider<CallModel>(
       create: (ctx) => CallModel(),
       builder: (context, child) {
-        final callModel = Provider.of<CallModel>(context, listen: false);
+        final callModel = context.read<CallModel>();
 
         final future = new Future(() async {
           final token = await tokenModel.getToken();
@@ -30,9 +30,11 @@ class Call extends StatelessWidget {
 
         return FutureWrapper(
           future: future,
-          builder: (context) => FloatPanel(
-            isAudio: _isAudio(conversationModel),
-          ),
+          builder: (context) {
+            return FloatPanel(
+              isAudio: _isAudio(conversationModel),
+            );
+          },
         );
       },
     );

@@ -11,11 +11,13 @@ class CallModel extends ChangeNotifier {
   MediaStream _oppositeStream;
   String _oppositeId;
   bool _float = false;
+  bool _enterd = false;
   OpenViduError _error;
 
   MediaStream get localStream => _localStream;
   MediaStream get oppositeStream => _oppositeStream;
   bool get float => _float;
+  bool get enterd => _enterd;
   bool get floatSelf => _oppositeStream != null;
   bool get hiddenLocal => floatSelf && _float;
   OpenViduError get error => _error;
@@ -36,6 +38,13 @@ class CallModel extends ChangeNotifier {
       _error = e is OpenViduError ? e : OtherError();
       await stop();
     }
+  }
+
+  enter() async {
+    if (_enterd) return;
+    await _session.publishLocalStream();
+    _enterd = true;
+    notifyListeners();
   }
 
   void _listenSessionEvents() {
@@ -73,9 +82,11 @@ class CallModel extends ChangeNotifier {
   }
 
   Future<void> stop() async {
+    //在未connect的情况下需要手动释放这个对象
     await _localStream?.dispose();
 
     try {
+      //在未connect的情况下可能会有异常抛出
       await _session?.disconnect();
     } catch (e) {}
 
