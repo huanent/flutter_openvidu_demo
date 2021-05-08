@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import 'loading.dart';
@@ -14,7 +15,10 @@ class FutureWrapper extends StatelessWidget {
       future: future,
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
-          return Loading();
+          return Container(
+            child: Loading(),
+            color: Colors.white,
+          );
         } else {
           return builder(context);
         }

@@ -11,6 +11,7 @@ class CtrlPanel extends StatelessWidget {
         FloatBtn(),
         ActionBar(),
       ]),
+      bottom: false,
     );
   }
 }

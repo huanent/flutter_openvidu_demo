@@ -22,7 +22,7 @@ class _MediaStreamViewState extends State<MediaStreamView> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.stream == null) return Container(color: Colors.grey);
+    if (widget.stream == null) return Container(color: Colors.black);
     _render = RTCVideoRenderer();
 
     return FutureWrapper(
