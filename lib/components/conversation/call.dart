@@ -44,6 +44,7 @@ class Call extends StatelessWidget {
               selector: (ctx, s) => s.floatSelf,
               child: Stack(
                 children: [
+                  Container(color: Colors.black),
                   CallPanel(isAudio: _isAudio(conversationModel)),
                   Timer(),
                   ErrorDialog()
