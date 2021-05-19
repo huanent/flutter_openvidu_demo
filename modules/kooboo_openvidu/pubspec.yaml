@@ -1,6 +1,6 @@
 name: kooboo_openvidu
 description: openvidu sdk dart implement
-version: 0.3.0
+version: 0.3.1
 
 environment:
   sdk: ">=2.7.0 <3.0.0"

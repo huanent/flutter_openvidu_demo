@@ -9,7 +9,7 @@ import 'streamCreator.dart';
 
 class LocalConnection extends Connection {
   LocalConnection(String id, Token token, JsonRpc rpc) : super(id, token, rpc);
-  bool audioOnly = true;
+  bool audioOnly = false;
   bool hasAudio = true;
   bool hasVideo = false;
   bool audioActive = true;
@@ -67,7 +67,7 @@ class LocalConnection extends Connection {
       "publishVideo",
       params: {
         'audioOnly': audioOnly,
-        'hasAudio': hasVideo,
+        'hasAudio': hasAudio,
         'doLoopback': doLoopback,
         'hasVideo': hasVideo,
         'audioActive': audioActive,
