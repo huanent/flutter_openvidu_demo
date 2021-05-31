@@ -21,7 +21,7 @@ class Token {
 
   Token(this.url) {
     final uri = Uri.parse(url);
-    _host = uri.host;
+    _host = uri.authority;
     _sessionId = uri.queryParameters["sessionId"];
     _token = uri.queryParameters["token"];
     _role = uri.queryParameters["role"];
