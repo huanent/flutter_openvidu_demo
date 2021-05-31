@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'utils/globalHttpOverrides.dart';
+import 'package:flutter_openvidu_demo/pages/conversation.dart';
 
-import 'pages/chat.dart';
 import 'pages/home.dart';
+import 'utils/globalHttpOverrides.dart';
 
 void main() {
   /////关闭https证书验证/////
@@ -21,7 +21,7 @@ class App extends StatelessWidget {
       initialRoute: Home.routeName,
       routes: {
         Home.routeName: (ctx) => Home(),
-        Chat.routeName: (ctx) => Chat(),
+        Conversation.routeName: (ctx) => Conversation(),
       },
     );
   }

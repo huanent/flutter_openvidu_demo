@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_openvidu_demo/components/home/homeForm.dart';
 import 'package:flutter_openvidu_demo/models/tokenModel.dart';
+import 'package:flutter_openvidu_demo/pages/conversation.dart';
 import 'package:flutter_openvidu_demo/utils/permission.dart';
-
 import 'package:provider/provider.dart';
-
-import 'chat.dart';
 
 class Home extends StatelessWidget {
   static const routeName = "/home";
@@ -16,7 +14,7 @@ class Home extends StatelessWidget {
     PermissionChecker.check();
 
     void submit(TokenModel model) async {
-      Navigator.pushNamed(context, Chat.routeName, arguments: model);
+      Navigator.pushNamed(context, Conversation.routeName, arguments: model);
     }
 
     return Scaffold(
