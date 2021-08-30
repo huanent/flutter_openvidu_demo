@@ -42,3 +42,7 @@
 
 * Fix url bug
 
+## [0.4.0] - 2021.8.30
+
+* Surpport null safety
+
