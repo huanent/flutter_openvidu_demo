@@ -1,5 +1,4 @@
 import 'package:flutter_webrtc/flutter_webrtc.dart';
-
 import 'jsonRpc.dart';
 import 'models/token.dart';
 
@@ -7,9 +6,9 @@ abstract class Connection {
   final String id;
   final Token token;
   final JsonRpc rpc;
-  MediaStream stream;
-  String streamId;
-  Future<RTCPeerConnection> peerConnection;
+  MediaStream? stream;
+  String streamId = '';
+  late Future<RTCPeerConnection> peerConnection;
 
   final Map<String, dynamic> constraints = {
     'mandatory': {
@@ -81,14 +80,14 @@ abstract class Connection {
 
   Future<void> close() async {
     final connection = await peerConnection;
-    connection?.close();
-    connection?.dispose();
+    connection.close();
+    connection.dispose();
     stream?.dispose();
   }
 
   void enableVideo(bool enable) {
     if (stream == null) return;
-    stream.getVideoTracks().forEach((track) {
+    stream!.getVideoTracks().forEach((track) {
       track.enabled = enable;
     });
   }
@@ -96,7 +95,7 @@ abstract class Connection {
   void enableAudio(bool enable) {
     if (stream == null) return;
 
-    stream.getAudioTracks().forEach((track) {
+    stream!.getAudioTracks().forEach((track) {
       track.enabled = enable;
     });
   }
@@ -104,7 +103,7 @@ abstract class Connection {
   void enableSpeakerphone(bool enable) {
     if (stream == null) return;
 
-    stream.getAudioTracks().forEach((track) {
+    stream!.getAudioTracks().forEach((track) {
       track.enableSpeakerphone(enable);
     });
   }

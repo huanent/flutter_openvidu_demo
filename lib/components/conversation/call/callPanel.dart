@@ -3,13 +3,12 @@ import 'package:flutter/widgets.dart';
 import 'ctrlPanel.dart';
 import 'package:flutter_openvidu_demo/models/callModel.dart';
 import 'package:provider/provider.dart';
-
 import 'audioPanel.dart';
 import 'videoPanel.dart';
 
 class CallPanel extends StatelessWidget {
   final bool isAudio;
-  const CallPanel({Key key, this.isAudio = false}) : super(key: key);
+  const CallPanel({Key? key, this.isAudio = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

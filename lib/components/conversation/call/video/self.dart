@@ -7,7 +7,7 @@ import 'package:flutter_webrtc/flutter_webrtc.dart';
 class Self extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final localStream = context.select<CallModel, MediaStream>(
+    final localStream = context.select<CallModel, MediaStream?>(
       (value) => value.localStream,
     );
 

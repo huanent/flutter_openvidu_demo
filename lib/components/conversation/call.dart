@@ -13,7 +13,7 @@ import 'call/timer.dart';
 class Call extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final tokenModel = ModalRoute.of(context).settings.arguments as TokenModel;
+    final tokenModel = ModalRoute.of(context)?.settings.arguments as TokenModel;
     final conversationModel = context.read<ConversationModel>();
 
     return ChangeNotifierProvider<CallModel>(
@@ -39,7 +39,7 @@ class Call extends StatelessWidget {
                 //如果发现对方已经在房间内推流,而自己还没有推,则立即推流
                 if (!callModel.enterd && value) callModel.enter();
 
-                return child;
+                return child ?? Container();
               },
               selector: (ctx, s) => s.floatSelf,
               child: Stack(

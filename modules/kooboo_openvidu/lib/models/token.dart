@@ -1,14 +1,14 @@
 class Token {
   final String url;
 
-  String _host;
-  String _sessionId;
-  String _token;
-  String _role;
-  String _version;
-  String _coturnIp;
-  String _turnUsername;
-  String _turnCredential;
+  late String _host;
+  late String _sessionId;
+  late String _token;
+  late String _role;
+  late String _version;
+  late String _coturnIp;
+  late String _turnUsername;
+  late String _turnCredential;
 
   String get host => _host;
   String get sessionId => _sessionId;
@@ -22,20 +22,20 @@ class Token {
   Token(this.url) {
     final uri = Uri.parse(url);
     _host = uri.authority;
-    _sessionId = uri.queryParameters["sessionId"];
-    _token = uri.queryParameters["token"];
-    _role = uri.queryParameters["role"];
-    _version = uri.queryParameters["version"];
-    _coturnIp = uri.queryParameters["coturnIp"];
-    _turnUsername = uri.queryParameters["turnUsername"];
-    _turnCredential = uri.queryParameters["turnCredential"];
+    _sessionId = uri.queryParameters["sessionId"] ?? '';
+    _token = uri.queryParameters["token"] ?? '';
+    _role = uri.queryParameters["role"] ?? '';
+    _version = uri.queryParameters["version"] ?? '';
+    _coturnIp = uri.queryParameters["coturnIp"] ?? '';
+    _turnUsername = uri.queryParameters["turnUsername"] ?? '';
+    _turnCredential = uri.queryParameters["turnCredential"] ?? '';
   }
 
   void appendInfo({
-    String role,
-    String coturnIp,
-    String turnUsername,
-    String turnCredential,
+    String? role,
+    String? coturnIp,
+    String? turnUsername,
+    String? turnCredential,
   }) {
     if (role != null) _role = role;
     if (coturnIp != null) _coturnIp = coturnIp;
