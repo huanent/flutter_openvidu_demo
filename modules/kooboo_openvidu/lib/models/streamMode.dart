@@ -1,6 +1,6 @@
 enum StreamMode {
   frontCamera,
   backCamera,
-  srceen,
+  screen,
   audio,
 }

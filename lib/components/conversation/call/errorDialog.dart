@@ -9,7 +9,7 @@ class ErrorDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     var conversationModel = context.read<ConversationModel>();
 
-    return Selector<CallModel, OpenViduError>(
+    return Selector<CallModel, OpenViduError?>(
       builder: (context, error, child) {
         if (error == null) return SizedBox.shrink();
 

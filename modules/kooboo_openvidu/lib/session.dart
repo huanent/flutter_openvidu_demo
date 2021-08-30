@@ -14,15 +14,15 @@ import 'remoteConnection.dart';
 import 'streamCreator.dart';
 
 class Session {
-  Token _token;
-  String _userName;
+  late Token _token;
+  String _userName = '';
   bool _active = true;
-  JsonRpc _rpc;
-  LocalConnection _localConnection;
+  JsonRpc? _rpc;
+  LocalConnection? _localConnection;
   Map<String, RemoteConnection> _remoteConnections = {};
   Map<Event, Function(Map<String, dynamic> params)> _handlers = {};
 
-  List<Connection> get _allConnection {
+  List<Connection?> get _allConnection {
     return [
       ..._remoteConnections.entries.map((e) => e.value),
       _localConnection,
@@ -33,16 +33,16 @@ class Session {
     _token = Token(url);
   }
 
-  Future<void> connect([String userName]) async {
-    _userName = userName ?? DateTime.now().millisecondsSinceEpoch;
+  Future<void> connect([String? userName]) async {
+    _userName = userName ?? DateTime.now().millisecondsSinceEpoch.toString();
     final url = "wss://${_token.host}/openvidu?sessionId=${_token.sessionId}";
     _rpc = JsonRpc(onMessage: _onRpcMessage);
 
     try {
-      _rpc.connect(url);
+      _rpc?.connect(url);
       _heartbeat();
     } catch (e) {
-      _rpc.disconnect();
+      _rpc?.disconnect();
       throw NetworkError();
     }
 
@@ -55,10 +55,10 @@ class Session {
       turnUsername: response["turnUsername"],
     );
 
-    _dispatchEvent(Event.joinRoom, null);
+    _dispatchEvent(Event.joinRoom, {});
 
     try {
-      _localConnection = LocalConnection(response["id"], _token, _rpc);
+      _localConnection = LocalConnection(response["id"], _token, _rpc!);
       _addAlreadyInRoomConnections(response);
     } catch (e) {
       throw OtherError();
@@ -68,14 +68,17 @@ class Session {
   Future<void> disconnect() async {
     _active = false;
     await _rpc?.send("leaveRoom");
-    await Future.wait(_allConnection.map((e) => e?.close()));
+    await Future.wait(_allConnection.map((e) {
+      if (e == null) return Future.value();
+      return e.close();
+    }));
     if (_localConnection == null) StreamCreator.stream?.dispose();
     await _rpc?.disconnect();
   }
 
-  Future<MediaStream> startLocalPreview(
+  Future<MediaStream?> startLocalPreview(
     StreamMode mode, {
-    VideoParams videoParams,
+    VideoParams? videoParams,
   }) async {
     videoParams = videoParams ?? VideoParams.middle;
     try {
@@ -89,7 +92,7 @@ class Session {
 
   void switchCamera() async {
     if (StreamCreator.stream == null) return;
-    final tracks = StreamCreator.stream.getVideoTracks();
+    final tracks = StreamCreator.stream!.getVideoTracks();
     if (tracks.length == 0) return;
     Helper.switchCamera(tracks[0]);
   }
@@ -98,25 +101,31 @@ class Session {
     bool video = true,
     bool audio = true,
   }) {
-    if (StreamCreator.stream == null) {
+    if (StreamCreator.stream == null || _localConnection == null) {
       throw "Please call startLocalPreview first";
     }
 
-    _localConnection.setStream(
-      StreamCreator.stream,
+    _localConnection!.setStream(
+      StreamCreator.stream!,
       StreamCreator.mode,
       StreamCreator.videoParams,
     );
 
-    return _localConnection.publishStream(video, audio);
+    return _localConnection!.publishStream(video, audio);
   }
 
   Future<void> publishVideo(bool enable) {
-    return _localConnection.publishVideo(enable);
+    if (_localConnection == null) {
+      throw "Please call startLocalPreview first";
+    }
+    return _localConnection!.publishVideo(enable);
   }
 
   Future<void> publishAudio(bool enable) {
-    return _localConnection.publishAudio(enable);
+    if (_localConnection == null) {
+      throw "Please call startLocalPreview first";
+    }
+    return _localConnection!.publishAudio(enable);
   }
 
   Future<void> subscribeRemoteStream(
@@ -126,7 +135,7 @@ class Session {
     bool speakerphone = false,
   }) async {
     if (!_remoteConnections.containsKey(id)) return;
-    _remoteConnections[id].subscribeStream(
+    _remoteConnections[id]!.subscribeStream(
       _dispatchEvent,
       video,
       audio,
@@ -136,17 +145,17 @@ class Session {
 
   void setRemoteVideo(String id, bool enable) {
     if (!_remoteConnections.containsKey(id)) return;
-    _remoteConnections[id].enableVideo(enable);
+    _remoteConnections[id]!.enableVideo(enable);
   }
 
   void setRemoteAudio(String id, bool enable) {
     if (!_remoteConnections.containsKey(id)) return;
-    _remoteConnections[id].enableAudio(enable);
+    _remoteConnections[id]!.enableAudio(enable);
   }
 
   void setRemoteSpeakerphone(String id, bool enable) {
     if (!_remoteConnections.containsKey(id)) return;
-    _remoteConnections[id].enableSpeakerphone(enable);
+    _remoteConnections[id]!.enableSpeakerphone(enable);
   }
 
   void on(Event event, Function(Map<String, dynamic> params) handler) {
@@ -164,20 +173,20 @@ class Session {
     };
 
     try {
-      return await _rpc.send(
+      return await _rpc?.send(
         "joinRoom",
         params: initializeParams,
         hasResult: true,
       );
     } catch (e) {
-      if (e["code"] == 401) throw TokenError();
+      if (e is Map && e['code'] == 401) throw TokenError();
       throw OtherError();
     }
   }
 
   Future<void> _heartbeat() async {
     try {
-      await _rpc.send("ping", params: {"interval": 3000}, hasResult: true);
+      await _rpc?.send("ping", params: {"interval": 3000}, hasResult: true);
     } catch (e) {
       _dispatchEvent(Event.error, {"error": NetworkError()});
     }
@@ -188,7 +197,7 @@ class Session {
         if (!_active) break;
 
         try {
-          await _rpc.send("ping", hasResult: true);
+          await _rpc?.send("ping", hasResult: true);
         } catch (e) {
           _dispatchEvent(Event.error, {"error": NetworkError()});
         }
@@ -215,7 +224,7 @@ class Session {
     final id = model["id"];
     String userName = _getUserName(model);
     if (userName == _userName) return;
-    final connection = RemoteConnection(id, _token, _rpc);
+    final connection = RemoteConnection(id, _token, _rpc!);
     _remoteConnections[id] = connection;
     _dispatchEvent(Event.userJoined, {"id": id, "userName": userName});
 
@@ -239,12 +248,11 @@ class Session {
         final id = params["id"];
         _dispatchEvent(Event.userPublished, {"id": id});
         break;
-      case "participantJoined":
-        _addRemoteConnection(params);
-        break;
       case "iceCandidate":
         var id = params["senderConnectionId"];
-        _allConnection.firstWhere((c) => c.id == id).addIceCandidate(params);
+        _allConnection
+            .firstWhere((c) => (c?.id ?? '') == id)
+            ?.addIceCandidate(params);
         break;
       case "participantLeft":
         final id = params["connectionId"];

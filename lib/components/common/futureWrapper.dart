@@ -7,7 +7,11 @@ class FutureWrapper extends StatelessWidget {
   final Future future;
   final Widget Function(BuildContext context) builder;
 
-  const FutureWrapper({Key key, this.future, this.builder}) : super(key: key);
+  const FutureWrapper({
+    Key? key,
+    required this.future,
+    required this.builder,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

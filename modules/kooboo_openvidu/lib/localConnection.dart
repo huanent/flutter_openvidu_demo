@@ -15,9 +15,9 @@ class LocalConnection extends Connection {
   bool audioActive = true;
   bool videoActive = false;
   String typeOfVideo = "CAMERA";
-  int frameRate;
-  int width;
-  int height;
+  int frameRate = 0;
+  int width = 0;
+  int height = 0;
   final bool doLoopback = false;
 
   void setStream(
@@ -36,7 +36,7 @@ class LocalConnection extends Connection {
       videoActive = true;
     }
 
-    if (mode == StreamMode.srceen) typeOfVideo = "SCREEN";
+    if (mode == StreamMode.screen) typeOfVideo = "SCREEN";
 
     frameRate = videoParams.frameRate;
     width = videoParams.width;
@@ -44,17 +44,18 @@ class LocalConnection extends Connection {
   }
 
   Future<void> publishStream(bool video, bool audio) async {
+    if (stream == null) return;
     final connection = await peerConnection;
     enableVideo(video);
     enableAudio(audio);
 
     switch (sdpSemantics) {
       case "plan-b":
-        connection.addStream(stream);
+        connection.addStream(stream!);
         break;
       case "unified-plan":
-        stream.getTracks().forEach((track) {
-          connection.addTrack(track, stream);
+        stream?.getTracks().forEach((track) {
+          connection.addTrack(track, stream!);
         });
         break;
       default:
@@ -87,14 +88,14 @@ class LocalConnection extends Connection {
 
   Future<void> publishVideo(bool enable) async {
     if (stream == null) return;
-    stream.getVideoTracks().forEach((e) => e.enabled = enable);
+    stream!.getVideoTracks().forEach((e) => e.enabled = enable);
     videoActive = enable;
     await _streamPropertyChanged("videoActive", videoActive, "publishVideo");
   }
 
   Future<void> publishAudio(bool enable) async {
     if (stream == null) return;
-    stream.getAudioTracks().forEach((e) => e.enabled = enable);
+    stream!.getAudioTracks().forEach((e) => e.enabled = enable);
     audioActive = enable;
     await _streamPropertyChanged("audioActive", audioActive, "publishAudio");
   }

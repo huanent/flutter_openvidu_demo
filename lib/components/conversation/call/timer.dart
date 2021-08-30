@@ -10,7 +10,7 @@ class Timer extends StatelessWidget {
       builder: (context, float, child) {
         return AnimatedPositioned(
           curve: Curves.easeInOut,
-          child: child,
+          child: child ?? Container(),
           duration: Duration(milliseconds: 500),
           right: float ? 20 + srceen.padding.right : 0,
           top: (float ? 180 : 40) + srceen.padding.top,

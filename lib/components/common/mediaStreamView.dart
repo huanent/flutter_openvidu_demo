@@ -5,10 +5,10 @@ import 'package:flutter_webrtc/flutter_webrtc.dart';
 
 class MediaStreamView extends StatefulWidget {
   final bool mirror;
-  final MediaStream stream;
+  final MediaStream? stream;
 
   const MediaStreamView({
-    Key key,
+    Key? key,
     this.stream,
     this.mirror = true,
   }) : super(key: key);
@@ -18,12 +18,17 @@ class MediaStreamView extends StatefulWidget {
 }
 
 class _MediaStreamViewState extends State<MediaStreamView> {
-  RTCVideoRenderer _render;
+  late RTCVideoRenderer _render;
+
+  @override
+  void initState() {
+    super.initState();
+    _render = RTCVideoRenderer();
+  }
 
   @override
   Widget build(BuildContext context) {
     if (widget.stream == null) return Container(color: Colors.black);
-    _render = RTCVideoRenderer();
 
     return FutureWrapper(
       future: _render.initialize(),
@@ -40,8 +45,10 @@ class _MediaStreamViewState extends State<MediaStreamView> {
 
   @override
   void dispose() {
-    _render?.srcObject = null;
-    _render?.dispose();
+    if (_render.textureId != null) {
+      _render.srcObject = null;
+      _render.dispose();
+    }
     super.dispose();
   }
 }

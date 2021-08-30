@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 class Opposite extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Selector<CallModel, MediaStream>(
+    return Selector<CallModel, MediaStream?>(
       builder: (context, value, child) {
         return MediaStreamView(
           stream: value,
